@@ -1,0 +1,9 @@
+export type MACAddress = string;
+export type IPAddress = string;
+export type DataPacket = string;
+export type Frame = string;
+export type Port = number;
+export type Signal = string;
+export type Medium = 'WiFi' | 'Copper' | 'Fiber'
+export type Modulation = 'ASK' | 'FSK' | 'PSK' | 'QAM'
+export type Connector = 'RJRT' | 'USB' | 'SC' | 'ST' | 'MTP'
