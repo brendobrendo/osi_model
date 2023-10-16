@@ -2,10 +2,32 @@
  * The router's DHCP server assigns unique local IP addresses
  * for all connected devices.
  */
+import { MACAddress, IPAddress } from "../GeneralTypes";
 
 export class Router {
+    dhcpPool: IPAddress[];
+    leasedIPs: Map<MACAddress, IPAddress>;
+
     constructor() {
-        console.log('Router created');
+        this.dhcpPool = [];
+        this.leasedIPs = new Map();
+    }
+
+    assignIPAddress(macAddress: MACAddress): IPAddress | null {
+        // If MAC address already has a leased IP, return it
+        if (this.leasedIPs.has(macAddress)) {
+            return this.leasedIPs.get(macAddress);
+        }
+
+        // Otherwise, assign a new IP from the pool
+        const availableIP = this.dhcpPool.shift();
+        if (availableIP) {
+            this.leasedIPs.set(macAddress, availableIP);
+            return availableIP;
+        } else {
+            console.error("No IPs left in DHCP pool!");
+            return null;
+        }
     }
 
     // A map with all devices connected to the local network

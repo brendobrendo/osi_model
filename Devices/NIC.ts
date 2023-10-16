@@ -1,28 +1,29 @@
 /**
  * NICs primarily operate at the first two layers of the OSI Model
+ * Typically they are attached to a device like a Laptop or VM.
  */
 
 import { MACAddress, IPAddress, DataPacket } from "../GeneralTypes";
 import { Router } from "./Router";
-import { PhysicalLayerConnectionSpec, PhysicalLayerConnection } from "../Layers/physical_layer";
 
 export class NIC {
     private macAddress: MACAddress;
-    private ipAddress: IPAddress;
-    private connectedDevice: NIC | null;
+    private ipAddress?: IPAddress;
+    private connectedDevice: NIC;
 
     /**
      * @param macAddress type MACAddress
-     * @param ipAddress type IPAddress
      */
-    constructor(macAddress: MACAddress, ipAddress: IPAddress) {
+    constructor(macAddress: MACAddress) {
         this.macAddress = macAddress;
-        this.ipAddress = ipAddress;
-        this.connectedDevice = null;
     }
 
     getMACAddress(): MACAddress {
         return this.macAddress;
+    }
+
+    requestIP(router: Router) {
+        this.ipAddress = router.assignIPAddress(this.macAddress);
     }
 
     getIPAddress(): IPAddress {
